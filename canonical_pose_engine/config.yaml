@@ -1,0 +1,27 @@
+# canonical_pose_engine/config.yaml
+camera:
+  source: 0 # Integer for webcam, or path to video file
+  resolution: [1280, 720]
+  target_fps: 30
+  buffer_size: 5
+
+pose:
+  profile: 'performance' # 'performance', 'accuracy', 'battery_saver'
+  model_complexity: 1 # 0=light, 1=full, 2=heavy
+  min_detection_confidence: 0.5
+  min_tracking_confidence: 0.7
+  roi_padding_factor: 0.2
+  filter:
+    beta: 0.1 # Smoothing factor for OneEuroFilter, lower is smoother, higher is more responsive
+    min_cutoff: 1.0 # Minimum cutoff frequency, higher is more responsive
+
+visualization:
+  draw_landmarks: true
+  draw_connectors: true
+  draw_hud: true
+  adaptive_lod: true
+  lod_threshold_fps: 25 # Below this FPS, LOD is reduced
+
+performance:
+  target_fps: 30
+  adjustment_aggressiveness: 0.1 # How quickly to adjust quality
