@@ -59,7 +59,33 @@ class Visualizer:
     def _numpy_to_proto(self, landmarks_np: np.ndarray):
         """Converts NumPy array back to MediaPipe's LandmarkList format for drawing."""
         landmark_list = landmark_pb2.NormalizedLandmarkList()
+        
+        left_hand_indices = {
+            self.mp_pose.PoseLandmark.LEFT_WRIST.value,
+            self.mp_pose.PoseLandmark.LEFT_PINKY.value,
+            self.mp_pose.PoseLandmark.LEFT_INDEX.value,
+            self.mp_pose.PoseLandmark.LEFT_THUMB.value
+        }
+        # Get the threshold from config, default to 0.0 if not present
+        # (though we added it, good practice for robustness)
+        left_hand_threshold = self.config.get('left_hand_min_visibility_threshold', 0.0)
+
         for i in range(landmarks_np.shape[0]):
+            x, y, z, original_visibility = landmarks_np[i]
+            
+            current_visibility = original_visibility
+
+            if i in left_hand_indices and original_visibility < left_hand_threshold:
+                # If it's a left hand landmark and below threshold,
+                # set its visibility to 0.0 so mp_drawing.draw_landmarks
+                # will typically not render it or its connections,
+                # while keeping the landmark count consistent.
+                current_visibility = 0.0
+            
             lm = landmark_list.landmark.add()
-            lm.x, lm.y, lm.z, lm.visibility = landmarks_np[i]
+            lm.x = x
+            lm.y = y
+            lm.z = z
+            lm.visibility = current_visibility
+            
         return landmark_list

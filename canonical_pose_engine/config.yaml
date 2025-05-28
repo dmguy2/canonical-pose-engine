@@ -8,11 +8,11 @@ camera:
 pose:
   profile: 'performance' # 'performance', 'accuracy', 'battery_saver'
   model_complexity: 1 # 0=light, 1=full, 2=heavy
-  min_detection_confidence: 0.5
-  min_tracking_confidence: 0.7
+  min_detection_confidence: 0.5 # Reverted for general sensitivity
+  min_tracking_confidence: 0.7  # Reverted for general sensitivity
   roi_padding_factor: 0.2
   filter:
-    beta: 0.1 # Smoothing factor for OneEuroFilter, lower is smoother, higher is more responsive
+    beta: 0.5 # Smoothing factor for OneEuroFilter, lower is smoother, higher is more responsive
     min_cutoff: 1.0 # Minimum cutoff frequency, higher is more responsive
 
 visualization:
@@ -21,6 +21,7 @@ visualization:
   draw_hud: true
   adaptive_lod: true
   lod_threshold_fps: 25 # Below this FPS, LOD is reduced
+  left_hand_min_visibility_threshold: 0.85 # Min visibility to show left hand
 
 performance:
   target_fps: 30
