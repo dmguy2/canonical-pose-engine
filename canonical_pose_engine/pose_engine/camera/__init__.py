@@ -1,1 +1,0 @@
-# This file makes the 'camera' directory a Python package.
